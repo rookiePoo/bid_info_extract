@@ -16,6 +16,19 @@ def save_page(browser, save_dir, page_num):
     # 关闭文件
     f.close()
 
+def create_save_dir(save_news_dir, prov,city,date_range):
+    """
+
+    :param save_news_dir: 保存招投标新闻的路径
+    :param prov:
+    :param city:
+    :param date_range:
+    :return:
+    """
+    save_news_dir = os.path.join(save_news_dir, prov, city, date_range)
+    os.makedirs(save_news_dir, exist_ok=True)
+    return save_news_dir
+
 def make_dir(save_dir):
     os.makedirs(save_dir, exist_ok=True)
 

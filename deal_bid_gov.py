@@ -39,9 +39,6 @@ class DealBidGovDriver:
         print(self.start_date, self.end_date)
 
 
-
-
-
     def select_time_range(self):
         """
             时间范围最大为3个月
@@ -115,6 +112,10 @@ class DealBidGovDriver:
         time.sleep(5)
 
     def get_page_num(self):
+        """
+        获取到总的搜索页数
+        :return: page_num
+        """
 
         page_num= self.driver.find_element(By.XPATH, '//*[@id="paging"]/span[3]').text
         print("搜索记录总共{}页".format(page_num))
@@ -130,15 +131,15 @@ class DealBidGovDriver:
             writer.write(link.get_attribute('title') + '\t' + link.get_attribute('href') + '\n')
 
     def save_records(self, save_dir):
-
-        txt_name = self.province + "_" + self.city + "_" + self.start_date.replace("-","") + "-" + self.end_date.replace("-","")+'.txt'
+        data_range = self.start_date.replace("-","") + "-" + self.end_date.replace("-","")
+        txt_name = self.province + "_" + self.city + "_" + data_range + '.txt'
         save_path = os.path.join(save_dir, txt_name)
 
         record_writer = open(save_path, 'w')
         page_num = self.get_page_num()
         self.write_title_herf(record_writer)
 
-        for i in range(2, int(page_num)+1):
+        for i in range(2, int(page_num) + 1):
 
             self.driver.execute_script("javascript:getList({})".format(i))
             try:
@@ -151,6 +152,7 @@ class DealBidGovDriver:
             self.write_title_herf(record_writer)
 
         record_writer.close()
+        return save_path, data_range
 
     def quit(self):
         self.driver.quit()
